@@ -1,7 +1,4 @@
-﻿using Entity.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Core.Entites;
 
 namespace Entity.Concrete
 {
@@ -10,7 +7,7 @@ namespace Entity.Concrete
         public int ProductId { get; set; }
         public int CategoryId { get; set; }
         public string ProductName { get; set; }
-        public int UnitsInStock { get; set; }
+        public short UnitsInStock { get; set; }
         public decimal UnitPrice { get; set; }
     }
 }
