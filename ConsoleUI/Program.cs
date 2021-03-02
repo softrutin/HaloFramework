@@ -8,8 +8,9 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            ProductTest();
-            CategoryTest();
+            ProductDetailTest();
+            //ProductTest();
+            //CategoryTest();
         }
 
         private static void CategoryTest()
@@ -30,9 +31,26 @@ namespace ConsoleUI
 
             Console.WriteLine("********************PRODUCT******************");
 
-            foreach (var item in mg.GetAll())
+            var result = mg.GetAll();
+
+            foreach (var item in result.Data)
             {
                 Console.WriteLine(item.ProductName);
+            }
+        }
+
+
+        private static void ProductDetailTest()
+        {
+            ProductManager mg = new ProductManager(new EfProductDal());
+
+            Console.WriteLine("********************ProductDetailTest******************");
+
+            var result = mg.GetProductDetails();
+
+            foreach (var item in result.Data)
+            {
+                Console.WriteLine($"{item.CategoryName}  - {item.ProductName}  - {item.UnitsInStock}"); ;
             }
         }
     }
