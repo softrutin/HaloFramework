@@ -1,8 +1,10 @@
 ﻿using Business.Abstract;
+using Business.CCS;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entity.Concrete;
@@ -18,15 +20,28 @@ namespace Business.Concrete
     {
         IProductDal _productDal;
 
-        public ProductManager(IProductDal productDal)
+        ICategoryService _categoryService;
+
+        public ProductManager(IProductDal productDal, ICategoryService categoryService)
         {
             _productDal = productDal;
+            _categoryService = categoryService;
         }
 
 
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
+
+            IResult resp = BusinessRules.Run(
+                CheckIfProductCountOfCategoryCorrect(product.CategoryId),
+                CheckCategoryCount()
+                );
+
+            if (resp != null)
+            {
+                return resp;
+            }
 
             _productDal.Add(product);
 
@@ -46,6 +61,29 @@ namespace Business.Concrete
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
         {
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
+        }
+
+        private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
+        {
+            var result = _productDal.GetAll(x => x.CategoryId == categoryId).Count;
+            if (result > 10)
+            {
+                return new ErrorResult(Messages.ProductCountOfCategory);
+            }
+
+            return new SuccessResult();
+        }
+
+        public IResult CheckCategoryCount()
+        {
+            var resp = _categoryService.GetAll();
+
+            if (resp.Data.Count > 15)
+            {
+                return new ErrorResult();
+            }
+
+            return new SuccessResult();
         }
     }
 }
