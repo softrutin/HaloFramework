@@ -17,12 +17,12 @@ namespace Business.Concrete
             _categoryDal = categoryDal;
         }
 
-        IDataResult<List<Category>> ICategoryService.GetAll()
+        public IDataResult<List<Category>> GetAll()
         {
             return new SuccessDataResult<List<Category>>(_categoryDal.GetAll());
         }
 
-        IDataResult<Category> ICategoryService.GetByCategoryId(int categoryId)
+        public IDataResult<Category> GetByCategoryId(int categoryId)
         {
             return new SuccessDataResult<Category>(_categoryDal.Get(s => s.CategoryId == categoryId));
         }
