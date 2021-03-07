@@ -19,7 +19,7 @@ namespace ConsoleUI
 
             Console.WriteLine("********************CATEGORY******************");
 
-            foreach (var item in cm.GetAll())
+            foreach (var item in cm.GetAll().Data)
             {
                 Console.WriteLine(item.CategoryName);
             }
@@ -27,7 +27,7 @@ namespace ConsoleUI
 
         private static void ProductTest()
         {
-            ProductManager mg = new ProductManager(new EfProductDal());
+            ProductManager mg = new ProductManager(new EfProductDal(), new CategoryManager(new EfCategoryDal()));
 
             Console.WriteLine("********************PRODUCT******************");
 
@@ -42,7 +42,7 @@ namespace ConsoleUI
 
         private static void ProductDetailTest()
         {
-            ProductManager mg = new ProductManager(new EfProductDal());
+            ProductManager mg = new ProductManager(new EfProductDal(), new CategoryManager(new EfCategoryDal()));
 
             Console.WriteLine("********************ProductDetailTest******************");
 
